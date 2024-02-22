@@ -9,11 +9,11 @@ const router = Router();
 
 router.get('/', comprasGet);
 
-router.put('/:id', comprasPut);
+router.put('/', comprasPut);
 
 router.post('/', comprasPost );
 
-router.delete('/', comprasDelete);
+router.delete('/:id', comprasDelete);
 
 
 module.exports = router;

@@ -1,48 +1,68 @@
 
+const Compra = require('../models/compras');
+
 
 const { response , request} = require('express');
 
-const comprasGet = (req, res = response)=>{
-
-    //esta es una forma 
-    const query = req.query;
-
-    //si lo desectructuramos solo mostramos o obtenemos el valor que nos interesa
-    const { apikey , nombre } = req.query;
-
-    res.json({
-        msg: 'get api -controlador',
-        nombre,
-        apikey
-    });
-}
+ const comprasGet = async (req, res) => {
+    try {
+        const compras = await Compra.findAll();
+        res.json({ compras });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+      }
+};
 
 const comprasPost = (req, res = response)=>{
-
-    const body = req.body;
-
-    res.json({
-        msg: 'post api -controlador',
-        body
-    });
+    let mensaje = 'Inserción Exitosa'
+    const body = req.body //Captura de atributos
+    try {
+        const compras = new Compra(body) 
+        compras.save()
+        // res.json(producto);
+    } catch (error) {
+        mensaje = error
+        console.log(error)
+    }
+        res.json({
+        msg: mensaje
+    })
 }
 
 const comprasPut = (req, res = response)=>{
 
-    const id = req.params.id;
+    const {idCompra, descripcionCompra,  estadoCompra,  proveedores_idProveedor } = req.body
+    let mensaje = 'Modificación exitosa'
+    try{
+        Compra.updateMany({idCompra: idCompra}, 
+            { $set: { descripcionCompra: descripcionCompra, estadoCompra: estadoCompra,  proveedores_idProveedor:proveedores_idProveedor }})
+    }
+    catch(error){
+        mensaje = 'Se presentaron problemas en la modificación.'+req.body.descripcionCompra
+    }
 
     res.json({
-        msg: 'put api -controlador',
-        id
-    });
+        msg: mensaje
+    })
 }
 
 
 
 const comprasDelete = (req, res = response)=>{
+    const {idCompra} = req.body
+    let mensaje = 'La eliminiación se efectuó exitosamente.'
+
+    try{
+         Compra.findByIdAndDelete({idCompra: idCompra})
+    }
+    catch(error){
+        mensaje = 'Se presentaron problemas en la eliminación.'
+    }
+
     res.json({
-        msg: 'delete api -controlador'
-    });
+        msg: mensaje
+    })
 }
 
 module.exports ={
