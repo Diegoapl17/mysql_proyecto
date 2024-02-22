@@ -30,16 +30,26 @@ const comprasPost = (req, res = response)=>{
     })
 }
 
-const comprasPut = (req, res = response)=>{
+const comprasPut = async(req, res = response)=>{
 
     const {idCompra, descripcionCompra,  estadoCompra,  proveedores_idProveedor } = req.body
     let mensaje = 'Modificación exitosa'
     try{
-        Compra.updateMany({idCompra: idCompra}, 
-            { $set: { descripcionCompra: descripcionCompra, estadoCompra: estadoCompra,  proveedores_idProveedor:proveedores_idProveedor }})
+        const compra = await Compra.update(
+            {
+                descripcionCompra: descripcionCompra,
+                estadoCompra: estadoCompra,
+                proveedores_idProveedor: proveedores_idProveedor
+            },
+            {
+                where: {
+                    idCompra: idCompra
+                }
+            }
+        );
     }
     catch(error){
-        mensaje = 'Se presentaron problemas en la modificación.'+req.body.descripcionCompra
+        mensaje = 'Se presentaron problemas en la modificación.'
     }
 
     res.json({
@@ -49,15 +59,15 @@ const comprasPut = (req, res = response)=>{
 
 
 
-const comprasDelete = (req, res = response)=>{
+const comprasDelete = async(req, res)=> {
     const {idCompra} = req.body
     let mensaje = 'La eliminiación se efectuó exitosamente.'
 
     try{
-         Compra.findByIdAndDelete({idCompra: idCompra})
+         const compra = await Compra.destroy({ where: { idCompra: idCompra } });
     }
     catch(error){
-        mensaje = 'Se presentaron problemas en la eliminación.'
+        mensaje = 'Se presentaron problemas en la eliminación.'+ req.params.idCompra
     }
 
     res.json({
