@@ -35,7 +35,11 @@ const comprasPut = async(req, res = response)=>{
     const {idCompra, descripcionCompra,  estadoCompra,  proveedores_idProveedor } = req.body
     let mensaje = 'Modificación exitosa'
     try{
-        const compra = await Compra.update(
+
+        const find = await Compra.findByPk(idCompra);
+        console.log(find);
+        find != null ? 
+         await Compra.update(
             {
                 descripcionCompra: descripcionCompra,
                 estadoCompra: estadoCompra,
@@ -46,7 +50,9 @@ const comprasPut = async(req, res = response)=>{
                     idCompra: idCompra
                 }
             }
-        );
+        ) :
+
+        mensaje = 'No existe el usuario a modificar'
     }
     catch(error){
         mensaje = 'Se presentaron problemas en la modificación.'

@@ -10,6 +10,8 @@ class Server {
 
         this.port = process.env.PORT;
         this.comprasPath = '/api/compras';
+        this.proveedoresPath = '/api/proveedores';
+        this.productosPath = '/api/productos';
         //Midelewars
         this.middlewares();
 
@@ -36,6 +38,8 @@ class Server {
 
     routes(){
        this.app.use(this.comprasPath, require('../routes/compras'));
+       this.app.use(this.proveedoresPath, require('../routes/proveedores'));
+       this.app.use(this.productosPath, require('../routes/productos'));
     }
 
     listen(){

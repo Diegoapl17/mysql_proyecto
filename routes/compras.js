@@ -13,7 +13,7 @@ router.put('/', comprasPut);
 
 router.post('/', comprasPost );
 
-router.delete('/:id', comprasDelete);
+router.delete('/', comprasDelete);
 
 
 module.exports = router;

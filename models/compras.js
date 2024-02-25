@@ -1,5 +1,6 @@
 const db = require('../config/config');
 const { Sequelize, DataTypes } = require('sequelize'); 
+const Proveedores = require('./proveedores');
 
 
 class Compras extends Sequelize.Model {};
@@ -16,17 +17,20 @@ Compras.init({
     type: DataTypes.STRING
   },
   estadoCompra: {
-    allowNull: true,
+    allowNull: false,
     type: DataTypes.STRING
   },
   fechaCompra: {
-    allowNull: true,
+    allowNull: false,
     type: DataTypes.DATE
   }, 
   proveedores_idProveedor:{
-    allowNull: true,
-    type: DataTypes.INTEGER
-  }
+    type: DataTypes.INTEGER,
+    references: {
+        model:Proveedores,
+        key: "idProveedor",
+    },
+  },
 },{
     sequelize: db,
     modelName: 'Compras',
